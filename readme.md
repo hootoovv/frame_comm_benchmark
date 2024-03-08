@@ -14,7 +14,7 @@ use FastAPI to build up a HTTP restful server. try followings:
 ### 2. Benchmark
 
 ```shell
-pip install -r requirements_grpc.txt
+pip install -r requirements_rest.txt
 
 # start rest api server (fastapi)
 python rest_server.py
