@@ -1,0 +1,24 @@
+syntax = 'proto3';
+
+service API{
+    rpc process_frame(request_frame) returns (response_frame) {}
+}
+
+message request_frame{
+    int32 id = 1;
+    int32 width = 2;
+    int32 height = 3;
+    int32 depth = 4;
+    bytes frame = 5;
+}
+
+message response_frame{
+  int32 id = 1;
+  int32 width = 2;
+  int32 height = 3;
+  int32 depth = 4;
+  bytes frame = 5;
+  string json = 6;
+}
+
+// python -m grpc_tools.protoc --python_out=. --grpc_python_out=. -I. ./protobuf/api.proto

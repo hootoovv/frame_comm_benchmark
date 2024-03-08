@@ -1,0 +1,11 @@
+urllib3<2
+requests
+requests_unixsocket
+pybase64
+fastapi
+uvicorn
+python-multipart
+
+opencv-python
+opencv-contrib-python
+matplotlib

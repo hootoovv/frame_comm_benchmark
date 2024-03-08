@@ -1,0 +1,9 @@
+grpcio
+grpcio-tools
+
+urllib3<2
+requests
+requests_unixsocket
+
+opencv-python
+opencv-contrib-python
