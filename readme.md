@@ -1,4 +1,4 @@
-# Benchmark of vidoe frame transmission via RestServer or gRPC
+# Benchmark of vidoe frame transmission via RestServer, gRPC and ZMQ
 
 ## RestServer
 
@@ -56,9 +56,28 @@ pyhthon grpc_client.py
 
 ```
 
+## ZMQ
+
+### 1. Description
+
+use ZMQ to send frame between server and client.
+
+### 2. Benchmark
+
+```shell
+pip install -r requirements_zmq.txt
+
+# start zmq server (ipc on linux, localhost on windows)
+python zmq_server.py
+
+# create anothor terminal and run zmq client
+pyhthon zmq_client.py
+```
+
 ## Result
 
 * baseline: 105 fps
+* zmq: 50 fps
 * gRPC: 25 fps
 * base64 encode and decode: 4.8 fps
 * jpeg encode and decode: 8.2 fps
@@ -66,9 +85,10 @@ pyhthon grpc_client.py
 
 ## Conclusion
 
-1. gRPC is much faster than RestServer. gPRC go through binary data transfer and HTTP is going through string transfer. multipart upload will convert to base64?
-2. python buildin base64 is super slow. pybase64 is a little faster. both is slow, should try a C implementation base64 module. maybe due to python cannot run on multi core well.
-3. go jpeg compress then base64 is faster than orgianl rgb to base64. should due to less data need to convert to base64, though the image quality will drop due to jpeg compress.
-4. http upload and download is slower even than base64 encode and decode.
-5. with huge data trasmission, localhost (via virtual network driver) and uds (Unix Domain Socket, which not going through network stack) don't have too much different. small packet and much requent data transmission should see the difference.
-6. none of above method is good enough for video transmission.
+1. zmq is the fastest way, it just use socket to send binary data. (via Unix Domain Socket). but you need process the data structure yourself.
+2. gRPC is much faster than RestServer. gPRC go through binary data transfer and HTTP is going through string transfer. multipart upload will convert to base64?
+3. python buildin base64 is super slow. pybase64 is a little faster. both is slow, should try a C implementation base64 module. maybe due to python cannot run on multi core well.
+4. go jpeg compress then base64 is faster than orgianl rgb to base64. should due to less data need to convert to base64, though the image quality will drop due to jpeg compress.
+5. http upload and download is slower even than base64 encode and decode.
+6. with huge data trasmission, localhost (via virtual network driver) and uds (Unix Domain Socket, which not going through network stack) don't have too much different. small packet and much requent data transmission should see the difference.
+7. none of above method is good enough for video transmission.
