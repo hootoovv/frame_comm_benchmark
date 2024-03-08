@@ -58,11 +58,11 @@ pyhthon grpc_client.py
 
 ## Result
 
-baseline: 105 fps
-gRPC: 25 fps
-base64 encode and decode: 4.8 fps
-jpeg encode and decode: 8.2 fps
-file upload and download: 3.5 fps
+* baseline: 105 fps
+* gRPC: 25 fps
+* base64 encode and decode: 4.8 fps
+* jpeg encode and decode: 8.2 fps
+* file upload and download: 3.5 fps
 
 ## Conclusion
 
@@ -70,4 +70,5 @@ file upload and download: 3.5 fps
 2. python buildin base64 is super slow. pybase64 is a little faster. both is slow, should try a C implementation base64 module. maybe due to python cannot run on multi core well.
 3. go jpeg compress then base64 is faster than orgianl rgb to base64. should due to less data need to convert to base64, though the image quality will drop due to jpeg compress.
 4. http upload and download is slower even than base64 encode and decode.
-5. with huge data trasmission. localhost (via virtual network driver) and uds (Unix Domain Socket, which not going through network stack) don't have too much different. small packet and much requent data transmission should see the difference.
+5. with huge data trasmission, localhost (via virtual network driver) and uds (Unix Domain Socket, which not going through network stack) don't have too much different. small packet and much requent data transmission should see the difference.
+6. none of above method is good enough for video transmission.
