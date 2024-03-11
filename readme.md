@@ -9,7 +9,7 @@ use FastAPI to build up a HTTP restful server. try followings:
 1. baseline: not go through different process, decode and draw frame in same process.
 2. file upload and download: use http multipart file upload and download. all frame data go through RAM not read/write Harddisk.
 3. frame rgb data encode and decode: convert to base64 or hex string. post the string to server, echo back then decode and draw frame.
-4. frame jpg encode and decode: use jpeg encode and decode then convert to base64 string. wiht jpeg compress and decompress which will consume CPU, but data size is much less than rgb.
+4. frame jpg encode and decode: use jpeg encode and decode then convert to base64 string. with jpeg compress and decompress which will consume CPU, but data size is much less than rgb.
 
 ### 2. Benchmark
 
@@ -109,7 +109,7 @@ Use python shared memory to share frame data between processes and use ZMQ to se
 
 ## Final Conclusion
 
-1. Python shared memory client/serverprocess can cross python Interpreter. (Difference ptyhon version)
+1. Python shared memory client/server process can cross python Interpreter. (Difference ptyhon version)
 2. Python shared memory is the fastest way to share video frame between processes.
 3. So far the only limitation is both side should be written in Python.
 
