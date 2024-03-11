@@ -1,4 +1,4 @@
-# Benchmark of vidoe frame transmission via RestServer, gRPC and ZMQ
+# Benchmark of vidoe frame transmission via RestServer, gRPC, ZMQ and Python Shared Memory
 
 ## RestServer
 
@@ -95,3 +95,22 @@ pyhthon zmq_client.py
 5. HTTP upload and download is slower even than base64 encode and decode.
 6. With huge data trasmission, localhost (via virtual network driver) and uds (Unix Domain Socket, which not going through network stack) don't have too much different. Small packet and much requent data transmission should see the difference.
 7. None of above method is good enough for video transmission between processes.
+
+
+------------------------------------
+
+Not giving up. exploring and try other methods, fianlly found following:
+
+## Python Shared Memory
+
+Use python shared memory to share frame data between processes and use ZMQ to send frame properties. (gPRC or Restful should be simmilar)
+
+* shared memeory + zmq: 95 fps
+
+## Final Conclusion
+
+1. Python shared memory client/serverprocess can cross python Interpreter. (Difference ptyhon version)
+2. Python shared memory is the fastest way to share video frame between processes.
+3. So far the only limitation is both side should be written in Python.
+
+**This way works.**
