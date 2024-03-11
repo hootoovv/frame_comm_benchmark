@@ -8,7 +8,7 @@ use FastAPI to build up a HTTP restful server. try followings:
 
 1. baseline: not go through different process, decode and draw frame in same process.
 2. file upload and download: use http multipart file upload and download. all frame data go through RAM not read/write Harddisk.
-3. frame rgb data encode and decode: convert to base64 string. post the string to server, echo back then decode and draw frame.
+3. frame rgb data encode and decode: convert to base64 or hex string. post the string to server, echo back then decode and draw frame.
 4. frame jpg encode and decode: use jpeg encode and decode then convert to base64 string. wiht jpeg compress and decompress which will consume CPU, but data size is much less than rgb.
 
 ### 2. Benchmark
@@ -31,6 +31,7 @@ upload = True # test file upload and download
 totext = False # baseline, direct draw frame
 totext = True # echo image from fastapi server
 rgb = True  # use orginal rgb frame or compress to jpg
+hex = True # use hex string or base64 string
 ```
 
 ## gRPC
@@ -79,16 +80,18 @@ pyhthon zmq_client.py
 * baseline: 105 fps
 * zmq: 50 fps
 * gRPC: 25 fps
-* base64 encode and decode: 4.8 fps
+* base64 encode and decode: 4.4 fps (pybase64)
+* base64 encode and decode: 4.1 fps (build-in base64)
+* hex encode and decode: 4.0 fps
 * jpeg encode and decode: 8.2 fps
 * file upload and download: 3.5 fps
 
 ## Conclusion
 
-1. zmq is the fastest way, it just use socket to send binary data. (via Unix Domain Socket). but you need process the data structure yourself.
-2. gRPC is much faster than RestServer. gPRC go through binary data transfer and HTTP is going through string transfer. multipart upload will convert to base64?
-3. python buildin base64 is super slow. pybase64 is a little faster. both is slow, should try a C implementation base64 module. maybe due to python cannot run on multi core well.
-4. go jpeg compress then base64 is faster than orgianl rgb to base64. should due to less data need to convert to base64, though the image quality will drop due to jpeg compress.
-5. http upload and download is slower even than base64 encode and decode.
-6. with huge data trasmission, localhost (via virtual network driver) and uds (Unix Domain Socket, which not going through network stack) don't have too much different. small packet and much requent data transmission should see the difference.
-7. none of above method is good enough for video transmission.
+1. ZMQ is the fastest way, it just use socket to send binary data. (via Unix Domain Socket). But you need process the data structure yourself (RGB shape, etc.).
+2. gRPC is much faster than RestServer. gPRC go through binary data transfer, HTTP Rest is going through string transfer and HTTP multipart upload will NOT convert to base64.
+3. Python build-in base64 is super slow. pybase64 is a little faster. Both is slow, should try a C implementation base64 module. maybe due to python cannot run on multi core well.
+4. Going through jpeg compress then base64 is faster than orgianl rgb to base64. It should due to less data need to convert to base64, though the image quality will drop due to jpeg compress.
+5. HTTP upload and download is slower even than base64 encode and decode.
+6. With huge data trasmission, localhost (via virtual network driver) and uds (Unix Domain Socket, which not going through network stack) don't have too much different. Small packet and much requent data transmission should see the difference.
+7. None of above method is good enough for video transmission between processes.

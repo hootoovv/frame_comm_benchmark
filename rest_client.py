@@ -56,7 +56,7 @@ while True:
   h, w, d = frame.shape[:3]
   
   # frame = cv2.resize(frame, (0,0), fx=0.5, fy=0.5)
-  upload = True # test file upload and download
+  upload = False # test file upload and download
   if upload:
     params  = {"id": id, "w": w, "h": h, "d": d}
 
@@ -69,9 +69,12 @@ while True:
     totext = True # echo image from fastapi server
     if totext:
       rgb = True  # use orginal image or compress to jpg
-
+      hex = True  # use base64 or hex
       if rgb:
-        encoded_string = str(base64.b64encode(frame))[2:-1]
+        if hex:
+          encoded_string = bytes(frame).hex()
+        else:
+          encoded_string = str(base64.b64encode(frame))[2:-1]
       else:
         img_encode = cv2.imencode('.jpg', frame)[1]
         encoded_string = str(base64.b64encode(img_encode))[2:-1]
@@ -81,11 +84,14 @@ while True:
       resp = requests.post(url + "/echo/string", json=payload)
       encoded_string = resp.json()["data"]["frame"]
 
-      img_data = base64.b64decode(encoded_string)
-      img_array = np.fromstring(img_data, np.uint8)
+      if hex:
+        img_array = np.frombuffer(bytes.fromhex(encoded_string), np.uint8)
+      else:
+        img_data = base64.b64decode(encoded_string)
+        img_array = np.fromstring(img_data, np.uint8)
 
       if rgb:
-        img = img_array.reshape((h, w, d))
+        img = img_array.reshape((h, w, d)).copy()
       else:
         img = cv2.imdecode(img_array, cv2.IMREAD_COLOR)
     else:
