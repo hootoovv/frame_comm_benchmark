@@ -99,7 +99,7 @@ pyhthon zmq_client.py
 
 ------------------------------------
 
-Not giving up. exploring and try other methods, fianlly found following:
+Don't give up, HooTooVV! Explored and tried other methods, fianlly found following:
 
 ## Python Shared Memory
 
@@ -113,4 +113,4 @@ Use python shared memory to share frame data between processes and use ZMQ to se
 2. Python shared memory is the fastest way to share video frame between processes.
 3. So far the only limitation is both side should be written in Python.
 
-**This way works.**
+**This way works. :).**
