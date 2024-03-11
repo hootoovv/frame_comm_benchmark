@@ -7,5 +7,5 @@ uvicorn
 python-multipart
 
 opencv-python
-opencv-contrib-python
+# opencv-contrib-python
 matplotlib
