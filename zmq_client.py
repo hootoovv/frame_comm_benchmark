@@ -14,13 +14,13 @@ def connect(address, context):
 def one_frame(socket, img, id):
   h, w, d = img.shape[:3]
 
-  # socket.send_json({"id": id, "w": w, "h": h, "d": d})
-  # time.sleep(1)
-  socket.send(img)
-
-  #  Get the reply.
-  # json = socket.recv_json()
+  socket.send_json({"id": id, "w": w, "h": h, "d": d})
+  json = socket.recv_json()
   json = {"id": id, "w": w, "h": h, "d": d}
+  
+  # time.sleep(1)
+  # Frame.
+  socket.send(img)
   frame = socket.recv()
   # print(json)
 

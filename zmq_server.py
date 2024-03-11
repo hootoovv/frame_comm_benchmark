@@ -17,12 +17,11 @@ if __name__ == '__main__':
   print("Server started.")
 
   while True:
-    # json = socket.recv_json()
-    frame = socket.recv()
-
-    # print(json)
+    json = socket.recv_json()
+    socket.send_json(json)
 
     # time.sleep(1)
-
-    # socket.send_json(json)
+    frame = socket.recv()
     socket.send(frame)
+
+    # print(json)
